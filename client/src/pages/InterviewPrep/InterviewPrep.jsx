@@ -45,24 +45,37 @@ const InterviewPrep = () => {
       setIsLoading(false);
     }
   }
+
   const handleLoadMore = async()=>{
     try{
+      setIsLoading(true);
       const {role , experience , topicsToFocus , desc} = sessionData;
       const airesponse = await axios.post('http://localhost:8081/api/ai/generate-questions',{role , experience , topicsToFocus , desc, numberOfQuestions : 10} , {headers});
 
       const data = airesponse.data;
-      const response2 = await axios.post(`http://localhost:8081/api/sessions/create`, {role , experience , topicsToFocus , desc, questions : data}, {headers});
+
+      const response = await axios.put(`http://localhost:8081/api/sessions/${sessionId}` , {questions : data} , {headers});
       fetchSessionById();
       Toast({
         title: 'Added More Questions',
-        description: "You have successfully added more questions to the session",
+        description: response.data.message,
         status: 'success',
         position: 'top',
         duration: 9000,
         isClosable: true,
       })
     }catch(err){
+      Toast({
+        title: 'Error',
+        description: err?.response?.data?.message || err?.message|| 'An error occurred',
+        status: 'success',
+        position: 'top',
+        duration: 9000,
+        isClosable: true,
+      })
       console.log("Error while loading more questions", err);
+    }finally{
+      setIsLoading(false);
     }
   }
 

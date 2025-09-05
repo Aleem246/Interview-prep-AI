@@ -106,4 +106,35 @@ router.delete("/:id" ,protect, async(req , res)=>{
     res.status(500).json({message:"Internal Server Error", err});
    }
 })
+
+router.put("/:id",protect, async (req, res)=>{
+    try{
+        const {id : session_id} = req.params;
+        const {questions} = req.body;
+        const session = await Session.findById(session_id);
+        if(!session){
+            return res.status(404).json({message : "Session not found"});
+        }
+        const questionDocs = await Promise.all(
+          questions.map(async (ques) => {
+              const newQuestion = new Question({
+                  session : session._id,
+                  question : ques.question,
+                  answer : ques.answer,
+                  note : ques.note,
+              })
+              await newQuestion.save();
+              return newQuestion;
+          })
+        )
+        
+        session.questions.push(...questionDocs);
+        await session.save();
+        return res.status(200).json({message : "Questions added successfully"});
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({message:"Internal Server Error", err});
+    }
+})
 export {router};
