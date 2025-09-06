@@ -5,7 +5,7 @@ const questionAnswerPrompt = (role , experience , topicToFocus , numberOfQuestio
     Task : 
     -Role : ${role}
     -Candidate Experience : ${experience}
-    -Topics to Focus : ${topicToFocus}
+    -Topics to Focus : ${topicToFocus ??   `topics related to ${role}`}
     -generate ${numberOfQuestions} questions and answers.
     -For each quesiton , generate a detailed but beginner-friendly answers.
     -If the answer needs a code example , add a small code block inside.
@@ -42,4 +42,29 @@ const conceptExplainPrompt = (question)=>(
     `
 )
 
-export {questionAnswerPrompt , conceptExplainPrompt};
+const loadMorePrompt = (role , experience , topicToFocus , numberOfQuestions, questions)=>(
+    `
+    You are an AI trained to generate technical interview questions and answers.
+
+    Task : 
+    -Role : ${role}
+    -Candidate Experience : ${experience}
+    -Topics to Focus : ${topicToFocus ??   `topics related to ${role}`}
+    -generate ${numberOfQuestions} questions and answers.
+    -For each quesiton , generate a detailed but beginner-friendly answers.
+    -If the answer needs a code example , add a small code block inside.
+    - IMPORTANT: Do NOT repeat or rephrase any of the following existing questions:
+    ${JSON.stringify(questions, null, 2)}
+    -keep formatting very clean.
+    -return a pure JSON array like this :
+    [
+        {
+            "question" : "question here?",
+            "answer" : "answer here."
+        },
+        ...
+    ]
+        Important : Do not return any other text other than the JSON array, only return a valid JSON array.
+    
+    `)
+export {questionAnswerPrompt , conceptExplainPrompt, loadMorePrompt};

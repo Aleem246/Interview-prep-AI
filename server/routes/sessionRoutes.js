@@ -107,6 +107,8 @@ router.delete("/:id" ,protect, async(req , res)=>{
    }
 })
 
+
+// adding more questions to the session
 router.put("/:id",protect, async (req, res)=>{
     try{
         const {id : session_id} = req.params;

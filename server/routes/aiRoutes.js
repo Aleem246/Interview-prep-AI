@@ -3,7 +3,9 @@ import express, { raw } from "express"
 import {GoogleGenerativeAI} from "@google/generative-ai";
 import {protect} from "./authMiddleware.js";
 import dotenv from "dotenv"
-import {questionAnswerPrompt, conceptExplainPrompt} from "../utils/prompts.js";
+import {safeParseAIResponse} from "../utils/safe_parsing.js"
+import {questionAnswerPrompt, conceptExplainPrompt, loadMorePrompt} from "../utils/prompts.js";
+import Session from "../models/Session.js";
 dotenv.config();
 
 const router = express.Router();
@@ -25,26 +27,44 @@ router.post("/generate-questions" , protect , async(req , res)=>{
         const result = await model.generateContent(prompt);
         let rawtext = result.response.text();
 
-        const cleanedText = rawtext
-            .replace(/^```json\s*/, "") // remove start
-            .replace(/```$/, "") // remove ending ``
-            .trim(); // remove extra spaces
+        // const cleanedText = rawtext
+        //     .replace(/^```json\s*/, "") // remove start
+        //     .replace(/```$/, "") // remove ending ``
+        //     .trim(); // remove extra spaces
 
+        let cleanedText =
+      typeof rawtext === "string"
+        ? rawtext
+            .replace(/^```(?:json)?\s*/i, "") // remove ```json
+            .replace(/```$/i, "") // remove trailing ```
+            .trim()
+        : rawtext;
 
-            // Now safe to parse
-            try{
-                const data = JSON.parse(cleanedText);
-                return res.status(200).json(data);
-            }
-            catch(err){
-                console.log(err);
-                console.log(cleanedText);
-                return res.status(500).json({message : "Failed to parse json"})
-            }
+    let data;
+
+    if (typeof cleanedText === "string") {
+      try {
+        data = JSON.parse(cleanedText); // strict parse
+      } catch (err) {
+        console.error("Strict JSON.parse failed, returning raw string instead.");
+        return res.status(500).json({
+          message: "Failed to parse AI response as JSON",
+          raw: cleanedText,
+        });
+      }
+    } else if (typeof cleanedText === "object") {
+      // ✅ Already parsed (like the object you pasted)
+      data = cleanedText;
+    } else {
+      return res.status(500).json({ message: "AI returned unexpected format" });
+    }
+
+    return res.status(200).json(data);
+  } 
 
        
 
-    }catch(err){
+    catch(err){
         console.log(err);
         return res.status(500).json({message : "Failed to generate questions",
             error :err
@@ -65,24 +85,43 @@ router.post("/generate-explanation" , protect , async(req , res)=>{
         const result = await model.generateContent(prompt);
         let rawtext = result.response.text();
 
-        const cleanedText = rawtext
-            .replace(/^```json\s*/, "") // remove start
-            .replace(/```$/, "") // remove ending ``
-            .trim(); // remove extra spaces
+        // const cleanedText = rawtext
+        //     .replace(/^```json\s*/, "") // remove start
+        //     .replace(/```$/, "") // remove ending ``
+        //     .trim(); // remove extra spaces
 
+        let cleanedText =
+      typeof rawtext === "string"
+        ? rawtext
+            .replace(/^```(?:json)?\s*/i, "") // remove ```json
+            .replace(/```$/i, "") // remove trailing ```
+            .trim()
+        : rawtext;
 
-            // Now safe to parse
-            try{
-                const data = JSON.parse(cleanedText);
-                return res.status(200).json(data);
-            }
-            catch(err){
-                console.log(err);
-                // console.log(cleanedText);
-                return res.status(500).json({message : "Failed to parse json"})
-            }
+    let data;
 
-    }catch(err){
+    if (typeof cleanedText === "string") {
+      try {
+        data = JSON.parse(cleanedText); // strict parse
+      } catch (err) {
+        console.error("Strict JSON.parse failed, returning raw string instead.");
+        return res.status(500).json({
+          message: "Failed to parse AI response as JSON",
+          raw: cleanedText,
+        });
+      }
+    } else if (typeof cleanedText === "object") {
+      // ✅ Already parsed (like the object you pasted)
+      data = cleanedText;
+    } else {
+      return res.status(500).json({ message: "AI returned unexpected format" });
+    }
+
+    return res.status(200).json(data);
+  } 
+  
+
+catch(err){
         console.log(err);
         return res.status(500).json({message : "Failed to generate explanation",
             error :err
@@ -90,5 +129,58 @@ router.post("/generate-explanation" , protect , async(req , res)=>{
     }
 })
 
+router.post("/loadMore-questions" , protect , async(req , res)=>{
+    try{
+        // console.log("keys", GEMINI_API_KEY.slice(0,6));
+        
+        const {role , experience , topicsToFocus , numberOfQuestions, questions } = req.body;
+        
+        const prompt = loadMorePrompt(role, experience, topicsToFocus, numberOfQuestions , questions);
+
+        // console.log(questions);
+        const result = await model.generateContent(prompt);
+        let rawtext = result.response.text();
+
+        // const cleanedText = rawtext
+        //     .replace(/^```json\s*/, "") // remove start
+        //     .replace(/```$/, "") // remove ending ``
+        //     .trim(); // remove extra spaces
+
+        let cleanedText =
+      typeof rawtext === "string"
+        ? rawtext
+            .replace(/^```(?:json)?\s*/i, "") // remove ```json
+            .replace(/```$/i, "") // remove trailing ```
+            .trim()
+        : rawtext;
+
+    let data;
+
+    if (typeof cleanedText === "string") {
+      try {
+        data = JSON.parse(cleanedText); // strict parse
+      } catch (err) {
+        console.error("Strict JSON.parse failed, returning raw string instead.");
+        return res.status(500).json({
+          message: "Failed to parse AI response as JSON",
+          raw: cleanedText,
+        });
+      }
+    } else if (typeof cleanedText === "object") {
+      // ✅ Already parsed (like the object you pasted)
+      data = cleanedText;
+    } else {
+      return res.status(500).json({ message: "AI returned unexpected format" });
+    }
+
+    return res.status(200).json(data);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Failed to generate questions",
+      error: err.message,
+    });
+  }
+})
 
 export {router};

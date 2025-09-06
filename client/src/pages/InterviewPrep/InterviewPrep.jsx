@@ -50,10 +50,11 @@ const InterviewPrep = () => {
     try{
       setIsLoading(true);
       const {role , experience , topicsToFocus , desc} = sessionData;
-      const airesponse = await axios.post('http://localhost:8081/api/ai/generate-questions',{role , experience , topicsToFocus , desc, numberOfQuestions : 10} , {headers});
+      //generating more questions
+      const airesponse = await axios.post('http://localhost:8081/api/ai/loadMore-questions',{role , experience , topicsToFocus , numberOfQuestions : 10 , questions : sessionData.questions } , {headers});
 
       const data = airesponse.data;
-
+      //adding generated questions to the session
       const response = await axios.put(`http://localhost:8081/api/sessions/${sessionId}` , {questions : data} , {headers});
       fetchSessionById();
       Toast({
@@ -68,7 +69,7 @@ const InterviewPrep = () => {
       Toast({
         title: 'Error',
         description: err?.response?.data?.message || err?.message|| 'An error occurred',
-        status: 'success',
+        status: 'error',
         position: 'top',
         duration: 9000,
         isClosable: true,
