@@ -49,9 +49,7 @@ export default function signUp({setActiveTab, onclose}) {
     
     const submit = async()=>{
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/sign-up`, formData);
-        
-        
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/sign-up`, formData);    
 
           toast({
               title: 'Account created.',

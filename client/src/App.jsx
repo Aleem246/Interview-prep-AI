@@ -1,17 +1,15 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import React from 'react';
 import LandingPage from './pages/LandingPage';
-import Login from './pages/Auth/login';
-import SignUp from "./pages/Auth/signUp";
 import DashBoard from './pages/Home/DashBoard';
 import InterviewPrep from './pages/InterviewPrep/InterviewPrep';
 import Navbar from './pages/Navbar/Navbar';
 import { authActions } from './store/auth';
 import {jwtDecode} from 'jwt-decode';
-import { use } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 const App = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const validateToken = async()=>{
     const token = localStorage.getItem('token');

@@ -12,7 +12,7 @@ import { Link  } from 'react-router-dom';
 
 const DashBoard = () => {
   const {isOpen , onOpen , onClose} = useDisclosure();
-  const {isOpen:isOpenAlert , onOpen : onOpenAlert , onClose : onCloseAlert} = useDisclosure();
+
   const [sessions , setSessions] = useState([]);
   const headers = {
       authorization : `Bearer ${localStorage.getItem("token")}`
@@ -62,9 +62,9 @@ const onDelete = async(session_id)=>{
       <SimpleGrid direction={'column'} columns={{base : 1 , md : 2 , lg : 3}} spacing={5} p={5}>
       {
         sessions.map((session)=>(
-          <Link to={`/interview-prep/${session._id}`} key={session._id}>
-            <SessionCard data={session}  onDelete={onDelete}/>
-          </Link>
+          
+            <SessionCard data={session}  key={session._id} onDelete={onDelete}/>
+          
             
        ))}
        </SimpleGrid>

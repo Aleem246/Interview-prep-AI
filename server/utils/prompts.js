@@ -1,6 +1,8 @@
 const questionAnswerPrompt = (role , experience , topicToFocus , numberOfQuestions)=>(
     `
     You are an AI trained to generate technical interview questions and answers.
+    Your output must be **only a valid JSON array**, nothing else. 
+    Do not include  markdown formatting, or extra text.
 
     Task : 
     -Role : ${role}
@@ -18,13 +20,15 @@ const questionAnswerPrompt = (role , experience , topicToFocus , numberOfQuestio
         },
         ...
     ]
-        Important : Do not return any other text other than the JSON array, only return a valid JSON array.
+        Important : output fomat should ne strictly JSON array nothing else. Do not return any other text other than the JSON array, only return a valid JSON array.
     
     `)
 
 const conceptExplainPrompt = (question)=>(
     `
     You are an AI trained to generate explanations for a given interview question.
+    Your output must be **only a valid JSON object**, nothing else. 
+    Do not include explanations, markdown formatting, or extra text.
 
     Task :
     -Explain the following interview question and its concept in depth as if you're teaching a beginner developer.
@@ -33,11 +37,12 @@ const conceptExplainPrompt = (question)=>(
     - If the explanation includes a code example, provide a small and easy to understand code block inside.
     -keep the formatting very clean and clear
     -return a pure JSON object like this :
+
     {
         "title" : "title here",
         "explanation" : "explanation here."
     }
-        Important: Do not add any extra text outside the JSON object, only return a valid JSON object.
+        Important:output fomat should ne strictly JSON object nothing else. Do not add any extra text outside the JSON object, only return a valid JSON object.
 
     `
 )
@@ -45,6 +50,8 @@ const conceptExplainPrompt = (question)=>(
 const loadMorePrompt = (role , experience , topicToFocus , numberOfQuestions, questions)=>(
     `
     You are an AI trained to generate technical interview questions and answers.
+    Your output must be **only a valid JSON array**, nothing else.
+    Do not include markdown formatting, or extra text. 
 
     Task : 
     -Role : ${role}
@@ -64,7 +71,7 @@ const loadMorePrompt = (role , experience , topicToFocus , numberOfQuestions, qu
         },
         ...
     ]
-        Important : Do not return any other text other than the JSON array, only return a valid JSON array.
+        Important : Do not return any other text other than the JSON array, only return a valid JSON array, nothing else.
     
     `)
 export {questionAnswerPrompt , conceptExplainPrompt, loadMorePrompt};

@@ -161,6 +161,7 @@ router.post("/loadMore-questions" , protect , async(req , res)=>{
         data = JSON.parse(cleanedText); // strict parse
       } catch (err) {
         console.error("Strict JSON.parse failed, returning raw string instead.");
+        console.log(cleanedText)
         return res.status(500).json({
           message: "Failed to parse AI response as JSON",
           raw: cleanedText,
@@ -176,6 +177,7 @@ router.post("/loadMore-questions" , protect , async(req , res)=>{
     return res.status(200).json(data);
   } catch (err) {
     console.error(err);
+    console.log(cleanedText);
     return res.status(500).json({
       message: "Failed to generate questions",
       error: err.message,

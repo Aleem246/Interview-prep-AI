@@ -1,16 +1,23 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react'
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box,
+   Button, Flex, Heading, HStack,
+   Text, useBreakpointValue, 
+   useDisclosure} from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import {LuPin , LuPinOff , LuSparkles} from 'react-icons/lu'
 import AIResponsePreview from '../../pages/InterviewPrep/components/AIResponsePreview'
 import { useState } from 'react'
 import axios, { Axios } from 'axios'
-const QuestionCard = ({question,fetch, handleLearnMore}) => {
+import Drawer from '../../pages/InterviewPrep/components/Drawer'
+const QuestionCard = ({question ,fetch, handleLearnMore , explanation, isLoading}) => {
   
   const[isPinned , setIsPinned] = useState(question.isPinned);
-
+  const isMobile = useBreakpointValue({base : true , lg : false});
+  const {isOpen , onOpen , onClose} = useDisclosure();
   const headers = {
       authorization : `Bearer ${localStorage.getItem("token")}`
   }
+
+
   const handleToggle= async (question_id)=>{
     try{
         const response = await axios.put(`http://localhost:8081/api/questions/pin/${question_id}`,{},{headers}) 
@@ -23,8 +30,6 @@ const QuestionCard = ({question,fetch, handleLearnMore}) => {
     }
     
   }
-  
-  
   
   return (
     <Box p={2}  borderWidth={'2px'} borderRadius={'lg'} boxShadow={'lg'}>
@@ -47,7 +52,7 @@ const QuestionCard = ({question,fetch, handleLearnMore}) => {
                         <Button bg="purple.100" px={3} py={2} borderRadius={'md'} leftIcon={isPinned ? <LuPinOff /> : <LuPin />} onClick={()=>handleToggle(question._id)}/>
 
                         
-                          <Button  bg="green.100" ml={2} leftIcon={<LuSparkles />} onClick={()=>handleLearnMore(question.question)}>
+                          <Button  bg="green.100" ml={2} leftIcon={<LuSparkles />} onClick={()=>(onOpen(),handleLearnMore(question.question))}>
                              Learn More
                           </Button>
                         
@@ -58,15 +63,21 @@ const QuestionCard = ({question,fetch, handleLearnMore}) => {
                   </Flex>
             
 
-            <AccordionPanel px={6}>
-              <AIResponsePreview content={question.answer}/>
-              
-            </AccordionPanel>
-  </AccordionItem>
-
-  
-</Accordion>
+                <AccordionPanel px={6}>
+                  <AIResponsePreview content={question.answer}/>
+                  
+                </AccordionPanel>
+              </AccordionItem>  
+        </Accordion>
+        { 
+          (isMobile) && (isOpen) && 
+          <Box bg="yellow.100" p={2} boxShadow={'2xl'} flex={'1'}  overflowY={'auto'} h={'100vh'}>
+            
+            <Drawer  onClose={onClose} explanation={explanation} isLoading={isLoading}/>
+          </Box>
+        }
     </Box>
+    
   )
 }
 

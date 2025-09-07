@@ -47,7 +47,7 @@ const login=( {setActiveTab, onclose})=> {
         const response = await axios.post(`http://localhost:8081/api/auth/login`, formData);
 
 
-          console.log(response.data);
+          // console.log(response.data);
           toast({
             title: 'Login successful',
             description: 'You have successfully logged in',
