@@ -3,9 +3,9 @@ import express, { raw } from "express"
 import {GoogleGenerativeAI} from "@google/generative-ai";
 import {protect} from "./authMiddleware.js";
 import dotenv from "dotenv"
-import {safeParseAIResponse} from "../utils/safe_parsing.js"
+
 import {questionAnswerPrompt, conceptExplainPrompt, loadMorePrompt} from "../utils/prompts.js";
-import Session from "../models/Session.js";
+
 dotenv.config();
 
 const router = express.Router();
@@ -142,7 +142,7 @@ router.post("/loadMore-questions" , protect , async(req , res)=>{
         let rawtext = result.response.text();
 
 
-        let cleanedText =
+      let cleanedText =
       typeof rawtext === "string"
         ? rawtext
             .replace(/^```(?:json)?\s*/i, "") // remove ```json
