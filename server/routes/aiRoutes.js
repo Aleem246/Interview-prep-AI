@@ -141,10 +141,6 @@ router.post("/loadMore-questions" , protect , async(req , res)=>{
         const result = await model.generateContent(prompt);
         let rawtext = result.response.text();
 
-        // const cleanedText = rawtext
-        //     .replace(/^```json\s*/, "") // remove start
-        //     .replace(/```$/, "") // remove ending ``
-        //     .trim(); // remove extra spaces
 
         let cleanedText =
       typeof rawtext === "string"

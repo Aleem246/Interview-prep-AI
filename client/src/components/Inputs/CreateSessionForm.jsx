@@ -82,7 +82,7 @@ const CreateSessionForm = () => {
                         onChange={handleChange}/>
                     </FormControl>
 
-                    <FormControl id="numberOfQuestions">
+                    <FormControl id="numberOfQuestions" isRequired>
                         <FormLabel> Number of Questions to Generate</FormLabel>
                         <Input type="number"
                         name="numberOfQuestions"

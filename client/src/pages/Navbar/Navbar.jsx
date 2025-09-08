@@ -1,17 +1,18 @@
 import { Box, Button, Container, Flex, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 // import { authActions } from '../../store/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import Login from '../Auth/login'
 import SignUp from '../Auth/signUp'
 import { authActions } from '../../store/auth'
+import AuthModal from '../InterviewPrep/components/AuthModal'
 const Navbar = () => {
   const disPatch = useDispatch();
   const Navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();
-//   const [showPassword, setShowPassword] = useState(false);
+
   const [activeTab , setActiveTab] = useState(0); //0 for login , 1 for signup
 
   
@@ -24,11 +25,13 @@ const Navbar = () => {
      }
   return (
     <Box as="nav" bgGradient="linear(to-r, #feeccaff, #fff4b3ff)" py={4} boxShadow="lg">
-            <Container maxW="container.xl">
+            <Container maxW="container.2xl">
               <Flex justify="space-between" align="center">
-                <Heading as="h1" size="md" color="black">
-                  Interview Prep AI
-                </Heading>
+                
+                  <Heading as="h1" size="md" color="black" onClick={() => Navigate("/")}>  
+                    Interview Prep AI
+                  </Heading>
+                
                 <Flex gap={4}>
                   {
                     isLoggedin?
@@ -39,8 +42,10 @@ const Navbar = () => {
                 </Flex>
               </Flex>
             </Container>
-
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
+          
+          {/* login / signup modal  */}
+          <AuthModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} activeTab={activeTab} setActiveTab={setActiveTab}></AuthModal>
+          {/* <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
             <ModalOverlay bg="blackAlpha.600" backdropFilter="blur(1px)" />
             <ModalContent borderRadius="xl" overflow="hidden">
               <ModalHeader bgGradient="linear(to-r, #ffc1e0ff, #d8b3ffff)" py={6}>
@@ -60,7 +65,7 @@ const Navbar = () => {
                
               </ModalBody>
             </ModalContent>
-          </Modal>
+          </Modal> */}
         </Box>
   )
 }

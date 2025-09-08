@@ -3,21 +3,27 @@ import {
   Box,Button,Center,Checkbox,Container,
   Flex,    Heading,
   Image,  Text,
+  useDisclosure,
   
 } from '@chakra-ui/react';
 import { authActions } from '../store/auth';
-import { FiCheck, FiChevronRight, FiEye, FiEyeOff, FiMail, FiStar } from 'react-icons/fi';
+import {  FiChevronRight } from 'react-icons/fi';
 import {  useNavigate } from 'react-router-dom';
-
+import { useSelector } from 'react-redux';
+import AuthModal from './InterviewPrep/components/AuthModal';
+import img from "../assets/image.png"
 
 const LandingPage = () => {
   const Navigate = useNavigate();
+  const{isOpen , onClose , onOpen} = useDisclosure();
+  const [activeTab , setActiveTab] = useState(0); //0 for login , 1 for signup
+  const isLoggedin = useSelector((state) => state.auth.isLoggedIn);
   return (
 
     <Box>
 
       {/* Hero Image Section */}
-      <Box bgGradient="linear(to-r, #fff4b3ff ,#feeccaff, #ffdc9aff)" py={{base: 8,md :16}}>
+      <Box bgGradient="linear(to-r, #fff4b3ff , #feeccaff, #ffdc9aff)" py={{base: 8,md :16}}>
         <Container maxW="container.lg" >
           <Flex
             direction={{base : 'column', md: 'row'}}
@@ -47,7 +53,7 @@ const LandingPage = () => {
               <Button
                 colorScheme="orange"
                 size="lg"
-                onClick={()=>Navigate('/dashboard')}
+                onClick={()=>(!isLoggedin)? onOpen() : Navigate('/dashboard')}
                 borderRadius={'full'}
                 rightIcon={<FiChevronRight />}
               >
@@ -60,13 +66,17 @@ const LandingPage = () => {
         </Container>
       </Box>
 
+      {/* login / signup modal  */}
+        <AuthModal isOpen={isOpen} onOpen={onOpen}  onClose={onClose} activeTab={activeTab} setActiveTab={setActiveTab}/>
 
         {/* image section */}
-        <Box flex={1} w={'container.lg'} mx={'auto'}>
+        <Box flex={1} maxW={'container.lg'} mx={'auto'} px={4} py={6} bgGradient={"linear(to-r, #fff4b3ff , #feeccaff, #ffdc9aff)"}>
+          
             <Image 
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                src={img} 
                 alt="Interview preparation"
                 borderRadius="lg"
+                objectFit={'cover'}
                 boxShadow="lg"
             />
         </Box>
@@ -148,7 +158,7 @@ const LandingPage = () => {
       </Box>
 
       {/* footer */}
-      <Box py={[8, 16]} bg="blue.800" color="white">
+      <Box py={[8, 16]} bgGradient="linear(to-b, yellow.50, yellow.100)"  color="Black">
         <Container maxW="container.lg">
           <Flex
             direction={['column', 'row']}
@@ -161,19 +171,22 @@ const LandingPage = () => {
                 Ready to Ace Your Interview?
               </Heading>
               <Text fontSize="lg">
-                Join thousands who prepared with InterviewPrepAI.
+                Prepare smarter, interview better, and land your dream job.
               </Text>
             </Box>
             <Button
-              colorScheme="whiteAlpha"
+              colorScheme="orange"
               size="lg"
               rightIcon={<FiChevronRight />}
+              onClick={()=>(isLoggedin ? Navigate('/dashboard') : onOpen())}
             >
-              Start Free Trial
+              Let's go
             </Button>
           </Flex>
         </Container>
       </Box>
+
+     
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Flex, Stack, Text, useBreakpoint, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { Badge, Box, Button, Flex, Skeleton, Stack, Text, useBreakpoint, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import moment from 'moment';
 import {motion , AnimatePresence} from "framer-motion"
@@ -12,6 +12,8 @@ import { FaArrowLeft } from "react-icons/fa6";
 const InterviewPrep = () => {
   const {sessionId} = useParams();
   const [isLoading , setIsLoading] = useState(false);
+  const [learnMoreLoading , setlearnMoreLoading] = useState(false);
+  const [loadMoreLoading , setloadMoreLoading] = useState(false);
   const [sessionData , setSessionData] = useState(null);
   const {isOpen , onOpen , onClose} = useDisclosure();
   const [explanation , setExplanation ] = useState(null);
@@ -23,15 +25,17 @@ const InterviewPrep = () => {
   }
   const handleLearnMore = async(question)=>{
     try{
-      setIsLoading(true);
+      setlearnMoreLoading(true);
       onOpen();
+
       const response = await axios.post("http://localhost:8081/api/ai/generate-explanation" , {question} , {headers});
       setQuestionId(question._id);
       setExplanation(response.data);
+
     }catch(err){
       console.log("Error while fetching the explanation", err);
     }finally{
-      setIsLoading(false);
+      setlearnMoreLoading(false);
     }
   }
   const fetchSessionById = async()=>{
@@ -51,7 +55,7 @@ const InterviewPrep = () => {
 
   const handleLoadMore = async()=>{
     try{
-      setIsLoading(true);
+      setloadMoreLoading(true);
       const {role , experience , topicsToFocus , desc} = sessionData;
       //generating more questions
       const airesponse = await axios.post('http://localhost:8081/api/ai/loadMore-questions',{role , experience , topicsToFocus , numberOfQuestions : 10 , questions : sessionData.questions } , {headers});
@@ -79,7 +83,7 @@ const InterviewPrep = () => {
       })
       console.log("Error while loading more questions", err);
     }finally{
-      setIsLoading(false);
+      setloadMoreLoading(false);
     }
   }
 
@@ -93,7 +97,7 @@ const InterviewPrep = () => {
       {/* title card  */}
      
       <Box
-      bgGradient="linear(to-r, #a6ff8bff, #ffb3f5ff, #febf4aff)"
+        
       borderRadius="lg"
       w="100%"
       borderWidth="2px"
@@ -101,36 +105,44 @@ const InterviewPrep = () => {
       py={4}
       boxShadow="md"
     >
-      {/* Top section with Back Button and Title */}
-      
-       
+      {/* Top section Title */}
+      <Skeleton h='6'  mb='3' isLoaded={sessionData}>
         <Text as="h1" fontSize="2xl" fontWeight="bold">
           {sessionData?.role}
         </Text>
+      </Skeleton>
       
 
       {/* Subtitle */}
-      <Text as="h3" fontSize="lg"  mb={4} >
-        - {sessionData?.topicsToFocus}
-      </Text>
+      <Skeleton h='6' mb='3' isLoaded={sessionData}>
+        <Text as="h3" fontSize="lg"  mb={'4'} >
+          - {sessionData?.topicsToFocus}
+        </Text>
+      </Skeleton>
 
       {/* Badges */}
-      <Flex gap={3} wrap="wrap">
-        <Badge px={4} py={1} borderRadius="full" colorScheme="purple">
-          Experience: {sessionData?.experience} {sessionData?.experience === 1 ? "year" : "years"}
-        </Badge>
+      <Flex gap={3} wrap="wrap" justify={"flex-start"}>
+        <Skeleton isLoaded={!!sessionData}>
+          <Badge px={4} py={1} borderRadius="full" >
+            Experience: {sessionData?.experience} {sessionData?.experience === 1 ? "year" : "years"}
+          </Badge>
+        </Skeleton>
 
-        <Badge px={4} py={1} borderRadius="full" colorScheme="blue">
-          {sessionData?.questions?.length} Q&A
-        </Badge>
+        <Skeleton  isLoaded={!!sessionData}>
+          <Badge px={4} py={1} borderRadius="full">
+            {sessionData?.questions?.length} Q&A
+          </Badge>
+        </Skeleton>
 
-        <Badge px={4} py={1} borderRadius="full" colorScheme="green">
-          Last Updated:{" "}
-          {sessionData?.updatedAt
-            ? moment(sessionData.updatedAt).format("Do MMM YYYY")
-            : "N/A"}
-        </Badge>
-      </Flex>
+        <Skeleton  isLoaded={!!sessionData}>
+          <Badge px={4} py={1} borderRadius="full" >
+            Last Updated:{" "}
+            {sessionData?.updatedAt
+              ? moment(sessionData.updatedAt).format("Do MMM YYYY")
+              : "N/A"}
+          </Badge>
+        </Skeleton> 
+       </Flex>
     </Box>
 
 
@@ -142,7 +154,17 @@ const InterviewPrep = () => {
           <Stack spacing={4} px={2}>
             <AnimatePresence>
                 {
-                  
+                  !(sessionData)?(
+                    <>
+                        <Skeleton  height={20} mb={2} isLoaded={!!sessionData}/>
+                        <Skeleton  height={20} mb={2}isLoaded={!!sessionData}/>
+                        <Skeleton  height={20} mb={2} isLoaded={!!sessionData}/>
+                        <Skeleton  height={20} mb={2} isLoaded={!!sessionData}/>
+                        <Skeleton  height={20} mb={2} isLoaded={!!sessionData}/>
+                        
+                    </>
+                    
+                  ): 
                   sessionData?.questions?.map((question )=>(
 
                      <motion.div
@@ -153,7 +175,7 @@ const InterviewPrep = () => {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.4 }}
                       >
-                          <QuestionCard  question={question} fetch={fetchSessionById} handleLearnMore={handleLearnMore}  explanation={explanation} isLoading={isLoading} />
+                          <QuestionCard  question={question} fetch={fetchSessionById} handleLearnMore={handleLearnMore}  explanation={explanation} isLoading={learnMoreLoading} />
                       </motion.div>
                     
                   ))
@@ -161,7 +183,7 @@ const InterviewPrep = () => {
                 </AnimatePresence>
                 {
 
-                  sessionData && <Button mx={'auto'} colorScheme='purple' leftIcon={<MdOutlinePlaylistAdd />} onClick={handleLoadMore} isLoading={isLoading} loadingText="more questions...">Load More</Button>
+                  sessionData && <Button mx={'auto'} colorScheme='purple' leftIcon={<MdOutlinePlaylistAdd />} onClick={handleLoadMore} isLoading={loadMoreLoading} loadingText="more questions...">Load More</Button>
                 }
           </Stack>
       </Box>
@@ -170,7 +192,7 @@ const InterviewPrep = () => {
                 {
                   isDesktop && isOpen && (
                     <Box p={3} boxShadow={'2xl'} flex={'1'} borderRadius={'lg'} overflowY={'auto'} h={'100vh'} position="sticky" top={2}>
-                        <Drawer isOpen={isOpen} onClose={onClose} explanation={explanation} isLoading={isLoading}/>
+                        <Drawer isOpen={isOpen} onClose={onClose} explanation={explanation} isLoading={learnMoreLoading}/>
                     </Box>
                   )
                 }

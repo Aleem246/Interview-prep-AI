@@ -1,23 +1,18 @@
 import { 
-  Box, 
-  Flex, 
-  FormControl, 
-  FormLabel, 
-  Input, 
-  InputGroup, 
+  Box, Flex, FormControl, 
+  FormLabel, Input, InputGroup, 
   InputRightElement, 
-  Button, 
-  Heading, 
-  Text,
-  Checkbox,
-  useToast,
-  Stack,
+  Button, Heading, Text,
+  Checkbox,useToast,Stack,
   Link
 } from '@chakra-ui/react';
+import axios from 'axios';
 // import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, Link as RouterLink, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import { authActions } from '../../store/auth';
+
 
 
 export default function signUp({setActiveTab, onclose}) {
@@ -26,16 +21,14 @@ export default function signUp({setActiveTab, onclose}) {
     username: '',
     email: '',
     password: '',
-    address: ''
+    
   });
 
-  useEffect(()=>{
-    window.scrollTo(0, 0);
-    
-  },[])
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
+   const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,27 +38,30 @@ export default function signUp({setActiveTab, onclose}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
+
     
     const submit = async()=>{
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/sign-up`, formData);    
-
+        const response = await axios.post(`http://localhost:8081/api/auth/register`, formData);    
           toast({
               title: 'Account created.',
-            description: response.data.message,
+            description: "you have successfully signed up",
             status: 'success',
             position:'top',
               duration: 5000,
               isClosable: true,
       });
-    onclose();
-    navigate('/log-in');
+
+      dispatch(authActions.login());
+      onclose();
+      localStorage.setItem("id" , response.data._id);
+      localStorage.setItem("token", response.data.token);
+      navigate('/');
   } catch (error) {
     setTimeout(() => {
       toast({
         title: 'Error',
-        description: error.response.data.message,
+        description: error?.response?.data?.message,
         status: 'error',
         duration: 5000,
         position:'top',
@@ -169,7 +165,7 @@ export default function signUp({setActiveTab, onclose}) {
             {/* Submit Button */}
             <Button
               type="submit"
-              colorScheme="blue"
+              colorScheme="orange"
               size="lg"
               fontSize="md"
               isLoading={isSubmitting}

@@ -32,6 +32,7 @@ const QuestionCard = ({question ,fetch, handleLearnMore , explanation, isLoading
   }
   
   return (
+    
     <Box p={2}  borderWidth={'2px'} borderRadius={'lg'} boxShadow={'lg'}>
         <Accordion allowToggle>
             <AccordionItem>
@@ -71,7 +72,7 @@ const QuestionCard = ({question ,fetch, handleLearnMore , explanation, isLoading
         </Accordion>
         { 
           (isMobile) && (isOpen) && 
-          <Box bg="yellow.100" p={2} boxShadow={'2xl'} flex={'1'}  overflowY={'auto'} h={'100vh'}>
+          <Box bg="blackAlpha.100" p={2} boxShadow={'2xl'} flex={'1'}  overflowY={'auto'} h={'100vh'}>
             
             <Drawer  onClose={onClose} explanation={explanation} isLoading={isLoading}/>
           </Box>

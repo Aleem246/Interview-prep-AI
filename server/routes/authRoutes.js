@@ -12,7 +12,7 @@ const generateToken = (id)=>{
 
 router.post("/register",async(req , res)=>{
     try{
-        const {name , email , password , avatar} = req.body;
+        const {username : name , email , password,avatar } = req.body;
         
         if(name.length < 3){
             return res.status(400).json({message : "Username must be more than 3 characters"});
@@ -45,7 +45,7 @@ router.post("/register",async(req , res)=>{
         });
 
     }catch(Err){
-        res.status(500).json({message:"Internal Server Error"});
+        res.status(500).json({message:"Internal Server Error from backend"});
     }
 });
 

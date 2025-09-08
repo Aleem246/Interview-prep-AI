@@ -6,13 +6,12 @@ import AIResponsePreview from './AIResponsePreview'
 const Drawer = ({onClose , explanation , isLoading}) => {
   return (
 
-    <Box p={2}  borderRadius={'md'}>
+    <Box p={2}  borderRadius={'md'} bg="blackAlpha.100" >
         
             
           {/* <Text cursor={'pointer'} onClick={()=>{onClose()}}><AiOutlineClose /></Text> */}
           <Flex justify={'flex-end'} position={'sticky'} top={0}><AiOutlineClose onClick={()=>{onClose()}} p={2} cursor={'pointer'}/></Flex>
           
-        
           {
                   (isLoading) ? 
                       <Stack padding={2} spacing={1}>

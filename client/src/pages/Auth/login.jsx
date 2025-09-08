@@ -105,14 +105,14 @@ const login=( {setActiveTab, onclose})=> {
           <Stack spacing={4}>
             {/* Username Field */}
             <FormControl id="email" isRequired>
-              <FormLabel>Username </FormLabel>
+              <FormLabel>mail </FormLabel>
               <InputGroup>
               <Input 
                 type="text" 
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your username"
+                placeholder="yourmail@gmail.com"
                 focusBorderColor="blue.500"
                 
                 />
@@ -153,7 +153,7 @@ const login=( {setActiveTab, onclose})=> {
             {/* Submit Button */}
             <Button
               type="submit"
-              colorScheme="blue"
+              colorScheme="orange"
               size="lg"
               fontSize="md"
               isLoading={isSubmitting}

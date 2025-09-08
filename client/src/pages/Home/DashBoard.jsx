@@ -1,5 +1,5 @@
-import {  Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, 
-  ModalOverlay, SimpleGrid, useDisclosure, 
+import {  Box, Button, Center, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, 
+  ModalOverlay, SimpleGrid, Skeleton, SkeletonText, Spinner, useDisclosure, 
   useToast} from '@chakra-ui/react';
 import axios from 'axios';
 import React from 'react'
@@ -12,7 +12,7 @@ import { Link  } from 'react-router-dom';
 
 const DashBoard = () => {
   const {isOpen , onOpen , onClose} = useDisclosure();
-
+  const [sessionloading , setSessionLoading] = useState(false);
   const [sessions , setSessions] = useState([]);
   const headers = {
       authorization : `Bearer ${localStorage.getItem("token")}`
@@ -21,11 +21,14 @@ const DashBoard = () => {
   const Toast = useToast();
   const fetchAllSessions = async () => {
   try{
+    setSessionLoading(true);
     const response = await axios.get("http://localhost:8081/api/sessions/my-sessions",{headers});
     setSessions(response.data.data);
 
   }catch(err){
     console.log("Error while fetching the sessions", err);
+  }finally{
+    setSessionLoading(false);
   }
 }
 
@@ -60,10 +63,20 @@ const onDelete = async(session_id)=>{
     <Box  minH = {'85vh'} position = {'relative'}>
       {/* //session cards  */}
       <SimpleGrid direction={'column'} columns={{base : 1 , md : 2 , lg : 3}} spacing={5} p={5}>
-      {
-        sessions.map((session)=>(
+      { 
+        (sessionloading)? (
+          <>
+            <Center h={'100vh'} w="100vw">
+
+                <h1>
+                  <Spinner size="sm" /> Loading...</h1>
+            </Center>
+          </>
+        )
+        : 
+        sessions.map((session, index)=>(
           
-            <SessionCard data={session}  key={session._id} onDelete={onDelete}/>
+            <SessionCard data={session}  key={session._id} index={index} onDelete={onDelete} isLoading = {sessionloading}/>
           
             
        ))}
@@ -81,6 +94,7 @@ const onDelete = async(session_id)=>{
           <ModalContent  borderRaduis = "xl" overflow = "hidden">
 
             <ModalCloseButton/>
+
             <ModalBody pb={6}>
                <CreateSessionForm/>
             </ModalBody>
