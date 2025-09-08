@@ -1,14 +1,11 @@
-import {  Box, Button, Center, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, 
+import {  Box, Button, Center, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, 
   ModalOverlay, SimpleGrid, Skeleton, SkeletonText, Spinner, useDisclosure, 
   useToast} from '@chakra-ui/react';
 import axios from 'axios';
-import React from 'react'
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState ,useEffect } from 'react';
 import SessionCard from '../../components/Cards/SessionCard';
 import CreateSessionForm from '../../components/Inputs/CreateSessionForm';
-import { Link  } from 'react-router-dom';
-
+import nodata from "../../assets/no_data.jpg"
 
 const DashBoard = () => {
   const {isOpen , onOpen , onClose} = useDisclosure();
@@ -73,7 +70,40 @@ const onDelete = async(session_id)=>{
             </Center>
           </>
         )
-        : 
+        : (sessions.length==0)?(
+          <Flex
+              w="100vw" h="80vh" direction="column"
+              justify="center" align="center"
+              p={6} textAlign="center"
+              >
+  {/* Image Section */}
+        <Box maxW={{ base: "150px", md: "250px", lg: "300px" }} mb={6}>
+          <Image src={nodata} objectFit="contain" alt="No data" />
+        </Box>
+
+  {/* Text and Button */}
+          <Box>
+            <Heading as="h1" size="2xl" color="blue.800" mb={6}>
+              Start your interview preparation by adding a session
+            </Heading>
+
+            <Button
+              bg="#ff9411ff"
+              color="white"
+              borderRadius="full"
+              size="lg"
+              px={8}
+              py={6}
+              boxShadow="md"
+              _hover={{ bg: "#ff8000", boxShadow: "xl" }}
+              onClick={onOpen}
+            >
+              + Create a Session
+            </Button>
+          </Box>
+</Flex>
+
+        ):
         sessions.map((session, index)=>(
           
             <SessionCard data={session}  key={session._id} index={index} onDelete={onDelete} isLoading = {sessionloading}/>
@@ -82,10 +112,12 @@ const onDelete = async(session_id)=>{
        ))}
        </SimpleGrid>
       
-
-      <Button position={'fixed'} bg= "#ff9411ff" onClick={()=>onOpen()} borderRadius={'full'} color = "white" bottom={'6'} right={'4'} >
-          + Add New
-      </Button>
+       {
+        sessions.length>0 &&
+            <Button position={'fixed'} bg= "#ff9411ff" onClick={()=>onOpen()} borderRadius={'full'} color = "white" bottom={'6'} right={'4'} >
+                + Add New
+            </Button>
+      }
 
       
        {/* createSession form modal  */}

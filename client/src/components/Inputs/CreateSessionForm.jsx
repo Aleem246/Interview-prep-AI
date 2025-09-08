@@ -1,6 +1,6 @@
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Stack } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Stack, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const CreateSessionForm = () => {
@@ -17,6 +17,7 @@ const CreateSessionForm = () => {
     const [isLoading , setIsLoading] = useState(false);
     const [error , setError] = useState(null);
     const navigate = useNavigate();
+    const toast = useToast();
 
     const handleChange = (e)=>{
         const {name, value} = e.target;
@@ -34,10 +35,19 @@ const CreateSessionForm = () => {
             const response2 = await axios.post(`http://localhost:8081/api/sessions/create`, {role , experience , topicsToFocus , desc, questions : data}, {headers});
 
             setIsLoading(false);
+            toast({
+                title: 'Session Created.',
+                description: "you have successfully created a session",
+                status: 'success',
+                duration: 5000,
+                position:'top',
+                isClosable: true,
+            })
             // console.log(" response 2 = ",response2);
             navigate(`/interview-prep/${response2?.data?.data?._id}`);
 
         }catch(err){
+            handleSubmit();
             console.log("error while creating session", err);   
             
         }finally{

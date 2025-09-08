@@ -24,7 +24,7 @@ const Navbar = () => {
         Navigate('/');
      }
   return (
-    <Box as="nav" bgGradient="linear(to-r, #feeccaff, #fff4b3ff)" py={4} boxShadow="lg">
+    <Box as="nav" bgGradient="linear(to-r, #ffe0a6ff , #fff4b3ff  , #ffdc9aff)" py={4} boxShadow="lg" borderBlockEnd={"1px solid #000000ff"}>
             <Container maxW="container.2xl">
               <Flex justify="space-between" align="center">
                 

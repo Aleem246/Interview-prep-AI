@@ -19,7 +19,7 @@ const SessionCard = ({ data, index, onDelete , isLoading }) => {
         return role.length >=2 ? (role[0].charAt(0)+role[1].charAt(0)) : (title.substring(0,2));        
     }
     const colors = ["red.100", "green.100","orange.100", "blue.200", "purple.100"];
-    const bgcolor = colors[index % colors.length];
+    const bgcolor = colors[index % 5]; 
     
   return (
     

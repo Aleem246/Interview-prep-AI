@@ -73,14 +73,7 @@ const InterviewPrep = () => {
         isClosable: true,
       })
     }catch(err){
-      Toast({
-        title: 'Error',
-        description: err?.response?.data?.message || err?.message|| 'An error occurred',
-        status: 'error',
-        position: 'top',
-        duration: 9000,
-        isClosable: true,
-      })
+      handleLoadMore();
       console.log("Error while loading more questions", err);
     }finally{
       setloadMoreLoading(false);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Badge,
   Box,Button,Center,Checkbox,Container,
   Flex,    Heading,
   Image,  Text,
@@ -23,7 +24,7 @@ const LandingPage = () => {
     <Box>
 
       {/* Hero Image Section */}
-      <Box bgGradient="linear(to-r, #fff4b3ff , #feeccaff, #ffdc9aff)" py={{base: 8,md :16}}>
+      <Box bgGradient="linear(to-r, #fff4b3ff , #e7aa49b4)" py={{base: 8,md :16}}>
         <Container maxW="container.lg" >
           <Flex
             direction={{base : 'column', md: 'row'}}
@@ -33,18 +34,16 @@ const LandingPage = () => {
             gap={{base : 8 , md: 16}}
           >
             <Box flex={1}>
-                <Button colorScheme="yellow" borderRadius={'full'} color={'orange.50'} mb={4}>
-                    * AI Powered
-                </Button>
-              <Heading as="h1" size={{base : 'md', md : 'xl'}} fontWeight='semibold'  mb={4}>
-                Ace Interviews with 
-                <br/>  <span style={{color : " #ff9411ff "                  
-                }}>AI-Powered </span> 
-                Learning
-              </Heading>
+                <Badge colorScheme="orange" variant={'solid'} borderRadius="full" px={4} py={1}>AI Powered</Badge>
+                <Heading as="h1" size={{base : 'md', md : 'xl'}} fontWeight='semibold'  mb={4}>
+                  Ace Interviews with 
+                  <br/>  <span style={{color : " #e64d00da "                  
+                  }}>AI-Powered </span> 
+                  Learning
+                </Heading>
             </Box>
 
-            <Box flex={1}>
+            <Flex flex={1} direction={'column'} justify={{base : 'center', md: 'flex-start'}}>
               <Text fontSize={{ base : 'md', md: 'lg'}}  mb={6}>
                 Get role-specific interview questions, expand answers on demand, dive deep into concepts, 
                 and organize your preparation. Your complete toolkit for interview mastery and career success.
@@ -52,7 +51,8 @@ const LandingPage = () => {
 
               <Button
                 colorScheme="orange"
-                size="lg"
+                size="md"
+                maxW={{ base: 'full', md: '40%' }}
                 onClick={()=>(!isLoggedin)? onOpen() : Navigate('/dashboard')}
                 borderRadius={'full'}
                 rightIcon={<FiChevronRight />}
@@ -60,7 +60,7 @@ const LandingPage = () => {
                 Get Started
               </Button>
 
-            </Box>
+            </Flex>
 
           </Flex>
         </Container>
@@ -70,12 +70,13 @@ const LandingPage = () => {
         <AuthModal isOpen={isOpen} onOpen={onOpen}  onClose={onClose} activeTab={activeTab} setActiveTab={setActiveTab}/>
 
         {/* image section */}
-        <Box flex={1} maxW={'container.lg'} mx={'auto'} px={4} py={6} bgGradient={"linear(to-r, #fff4b3ff , #feeccaff, #ffdc9aff)"}>
+        <Box flex={1}  mx={'auto'} px={4} py={6} bgGradient={"linear(to-r, #fff4b3ff , #feeccaff, #ffdc9aff)"}>
           
             <Image 
-                src={img} 
+                src={img} w={'60%'} h={'auto'}
                 alt="Interview preparation"
                 borderRadius="lg"
+                mx={'auto'}
                 objectFit={'cover'}
                 boxShadow="lg"
             />
@@ -94,11 +95,11 @@ const LandingPage = () => {
                  _hover={{boxShadow : '2xl', borderColor : 'orange.400', transform : 'translateY(-3px)'}} 
                  boxShadow={'lg'} transition="all 0.2s ease-in-out">
                     <Heading as="h3" size="md" mb={4}>
-                        AI-Powered Learning
+                        Tailored Just for You
                     </Heading>
                     <Text mb={4}>
-                        Get role-s sadkfhakusdpecific interview questions, expand answers on demand, dive deep into concepts,
-                        and organize your preparation. Your complete toolkit for interview mastery and career success.
+                        Get interview questions and model answers based on your role, 
+                        experience, and specific focus areas no generic practice here
                     </Text>
                 </Box>
 
@@ -106,11 +107,12 @@ const LandingPage = () => {
                  _hover={{boxShadow : '2xl', borderColor : 'orange.400', transform : 'translateY(-3px)'}} 
                  boxShadow={'lg'} transition="all 0.2s ease-in-out">
                     <Heading as="h3" size="md" mb={4}>
-                        AI-Powered Learning
+                        Learn at Your Own Pace
                     </Heading>
                     <Text mb={4}>
-                        Get role-s sadkfhakusdpecific interview questions, expand answers on demand, dive deep into concepts,
-                        and organize your preparation. Your complete toolkit for interview mastery and career success.
+                        Expand answers only when you're ready. Dive deeper into any
+                         concept instantly with AI-powered detailed explanations.
+
                     </Text>
                 </Box>
 
@@ -118,25 +120,25 @@ const LandingPage = () => {
                  _hover={{boxShadow : '2xl', borderColor : 'orange.400', transform : 'translateY(-3px)'}} 
                  boxShadow={'lg'} transition="all 0.2s ease-in-out">
                     <Heading as="h3" size="md" mb={4}>
-                        AI-Powered Learning
+                        Capture Your Insights
                     </Heading>
                     <Text mb={4}>
-                        Get role-s sadkfhakusdpecific interview questions, expand answers on demand, dive deep into concepts,
-                        and organize your preparation. Your complete toolkit for interview mastery and career success.
+                        Add personal notes to any question and pin important ones to 
+                        the top — making your learning more organized and impactful.
                     </Text>
                 </Box>
-                
             </Flex>
             <Flex gap={6} mt={10} direction={{base : 'column', md : 'row'}}>
                 <Box flex={1} p={4} borderRadius={'lg'} bg={'yellow.100'} borderColor={'transparent'}
                  _hover={{boxShadow : '2xl', borderColor : 'orange.400', transform : 'translateY(-3px)'}} 
                  boxShadow={'lg'} transition="all 0.2s ease-in-out">
                     <Heading as="h3" size="md" mb={4}>
-                        AI-Powered Learning
+                        Understand the 'Why' Behind Answers
                     </Heading>
                     <Text mb={4}>
-                        Get role-s sadkfhakusdpecific interview questions, expand answers on demand, dive deep into concepts,
-                        and organize your preparation. Your complete toolkit for interview mastery and career success.
+                        Beyond just answers — unlock detailed concept 
+                        explanations generated by AI, helping you truly master each topic.
+
                     </Text>
                 </Box>
                 
@@ -144,11 +146,10 @@ const LandingPage = () => {
                  _hover={{boxShadow : '2xl', borderColor : 'orange.400', transform : 'translateY(-3px)'}} 
                  boxShadow={'lg'} transition="all 0.2s ease-in-out">
                     <Heading as="h3" size="md" mb={4}>
-                        AI-Powered Learning
+                        Save, Organize, and Revisit
                     </Heading>
                     <Text mb={4}>
-                        Get role-s sadkfhakusdpecific interview questions, expand answers on demand, dive deep into concepts,
-                        and organize your preparation. Your complete toolkit for interview mastery and career success.
+                      Easily save your interview sets, access them neatly in your dashboard, and pick up your preparation right where you left off.
                     </Text>
                 </Box>
                 
