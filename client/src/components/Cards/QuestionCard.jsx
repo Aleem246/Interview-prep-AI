@@ -1,12 +1,12 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box,
-   Button, Flex, Heading, HStack,
+   Button, Flex, 
    Text, useBreakpointValue, 
    useDisclosure} from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+
 import {LuPin , LuPinOff , LuSparkles} from 'react-icons/lu'
 import AIResponsePreview from '../../pages/InterviewPrep/components/AIResponsePreview'
 import { useState } from 'react'
-import axios, { Axios } from 'axios'
+import axios from 'axios'
 import Drawer from '../../pages/InterviewPrep/components/Drawer'
 const QuestionCard = ({question ,fetch, handleLearnMore , explanation, isLoading}) => {
   
@@ -16,11 +16,12 @@ const QuestionCard = ({question ,fetch, handleLearnMore , explanation, isLoading
   const headers = {
       authorization : `Bearer ${localStorage.getItem("token")}`
   }
-
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
+  // console.log(backend_url);
 
   const handleToggle= async (question_id)=>{
     try{
-        const response = await axios.put(`http://localhost:8081/api/questions/pin/${question_id}`,{},{headers}) 
+        const response = await axios.put(`${backend_url}/api/questions/pin/${question_id}`,{},{headers}) 
 
         setIsPinned( (prev)=> !prev );
         fetch();

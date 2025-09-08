@@ -3,8 +3,7 @@ import { Box, Text, IconButton, Flex, Badge, AlertDialog,
    AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, 
    AlertDialogFooter, Button, 
    useDisclosure,
-   Skeleton,
-   SkeletonText} from "@chakra-ui/react";
+   } from "@chakra-ui/react";
 // import { DeleteIcon } from "@chakra-ui/icons";
 import moment from "moment";
 import {FaTrash} from 'react-icons/fa'

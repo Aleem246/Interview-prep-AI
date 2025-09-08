@@ -7,7 +7,7 @@ import { MdOutlinePlaylistAdd } from "react-icons/md";
 import {Link, useParams} from 'react-router-dom'
 import QuestionCard from '../../components/Cards/QuestionCArd';
 import Drawer from './components/Drawer';
-import { FaArrowLeft } from "react-icons/fa6";
+
 
 const InterviewPrep = () => {
   const {sessionId} = useParams();
@@ -23,12 +23,13 @@ const InterviewPrep = () => {
   const headers = {
     authorization : `Bearer ${localStorage.getItem("token")}`
   }
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
+  // console.log(backend_url);
   const handleLearnMore = async(question)=>{
     try{
       setlearnMoreLoading(true);
       onOpen();
-
-      const response = await axios.post("http://localhost:8081/api/ai/generate-explanation" , {question} , {headers});
+      const response = await axios.post(`${backend_url}/api/ai/generate-explanation` , {question} , {headers});
       setQuestionId(question._id);
       setExplanation(response.data);
 
@@ -42,7 +43,7 @@ const InterviewPrep = () => {
     try{
       setIsLoading(true);
 
-      const response = await axios.get(`http://localhost:8081/api/sessions/${sessionId}`,{headers});
+      const response = await axios.get(`${backend_url}/api/sessions/${sessionId}`,{headers});
       // console.log("response" , response.data.data);
       setSessionData(response.data.data);
 
@@ -58,11 +59,11 @@ const InterviewPrep = () => {
       setloadMoreLoading(true);
       const {role , experience , topicsToFocus , desc} = sessionData;
       //generating more questions
-      const airesponse = await axios.post('http://localhost:8081/api/ai/loadMore-questions',{role , experience , topicsToFocus , numberOfQuestions : 10 , questions : sessionData.questions } , {headers});
+      const airesponse = await axios.post(`${backend_url}/api/ai/loadMore-questions`,{role , experience , topicsToFocus , numberOfQuestions : 10 , questions : sessionData.questions } , {headers});
 
       const data = airesponse.data;
       //adding generated questions to the session
-      const response = await axios.put(`http://localhost:8081/api/sessions/${sessionId}` , {questions : data} , {headers});
+      const response = await axios.put(`${backend_url}/api/sessions/${sessionId}` , {questions : data} , {headers});
       fetchSessionById();
       Toast({
         title: 'Added More Questions',

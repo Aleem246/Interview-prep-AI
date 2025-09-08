@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import {
   Badge,
-  Box,Button,Center,Checkbox,Container,
+  Box,Button,Center,Container,
   Flex,    Heading,
   Image,  Text,
   useDisclosure,
   
 } from '@chakra-ui/react';
-import { authActions } from '../store/auth';
+
 import {  FiChevronRight } from 'react-icons/fi';
 import {  useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';

@@ -1,6 +1,6 @@
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Stack, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const CreateSessionForm = () => {
@@ -15,10 +15,10 @@ const CreateSessionForm = () => {
         "authorization" : `Bearer ${localStorage.getItem("token")}`
     }
     const [isLoading , setIsLoading] = useState(false);
-    const [error , setError] = useState(null);
+    
     const navigate = useNavigate();
     const toast = useToast();
-
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
     const handleChange = (e)=>{
         const {name, value} = e.target;
         setformData(prev =>({...prev , [name] : value}));
@@ -29,10 +29,10 @@ const CreateSessionForm = () => {
         setIsLoading(true);
         const {role , experience , topicsToFocus , desc, numberOfQuestions} = formData;
         try{
-            const response = await axios.post(`http://localhost:8081/api/ai/generate-questions`, {role , experience , topicsToFocus , desc, numberOfQuestions}, {headers});
+            const response = await axios.post(`${backend_url}/api/ai/generate-questions`, {role , experience , topicsToFocus , desc, numberOfQuestions}, {headers});
 
             const data = response.data;
-            const response2 = await axios.post(`http://localhost:8081/api/sessions/create`, {role , experience , topicsToFocus , desc, questions : data}, {headers});
+            const response2 = await axios.post(`${backend_url}/api/sessions/create`, {role , experience , topicsToFocus , desc, questions : data}, {headers});
 
             setIsLoading(false);
             toast({

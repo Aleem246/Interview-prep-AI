@@ -8,9 +8,9 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 // import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, Link as RouterLink, useNavigate } from 'react-router-dom';
+import {  Link as RouterLink, useNavigate } from 'react-router-dom';
 import { authActions } from '../../store/auth';
 
 
@@ -28,8 +28,8 @@ export default function signUp({setActiveTab, onclose}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
-   const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -39,10 +39,11 @@ export default function signUp({setActiveTab, onclose}) {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // const url = Import.meta.env.backenk_url;
     
     const submit = async()=>{
       try {
-        const response = await axios.post(`http://localhost:8081/api/auth/register`, formData);    
+        const response = await axios.post(`${backend_url}/api/auth/register`, formData);    
           toast({
               title: 'Account created.',
             description: "you have successfully signed up",

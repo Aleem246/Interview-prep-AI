@@ -1,8 +1,8 @@
 import { 
   Box,   Flex,   FormControl,   FormLabel,   Input, 
-  InputGroup,   InputRightElement,   Button, 
+  InputGroup,      Button, 
   Heading,   Text,  Stack,  useToast,
-  Link,  Checkbox
+  
 } from '@chakra-ui/react';
 // import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
@@ -31,6 +31,7 @@ const login=( {setActiveTab, onclose})=> {
   const toast = useToast();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -44,7 +45,7 @@ const login=( {setActiveTab, onclose})=> {
     
     const submit = async () => {
       try {
-        const response = await axios.post(`http://localhost:8081/api/auth/login`, formData);
+        const response = await axios.post(`${backend_url}/api/auth/login`, formData);
 
 
           // console.log(response.data);

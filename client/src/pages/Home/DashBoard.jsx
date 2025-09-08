@@ -1,5 +1,5 @@
 import {  Box, Button, Center, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, 
-  ModalOverlay, SimpleGrid, Skeleton, SkeletonText, Spinner, useDisclosure, 
+  ModalOverlay, SimpleGrid, Spinner, useDisclosure, 
   useToast} from '@chakra-ui/react';
 import axios from 'axios';
 import { useState ,useEffect } from 'react';
@@ -14,12 +14,13 @@ const DashBoard = () => {
   const headers = {
       authorization : `Bearer ${localStorage.getItem("token")}`
   }
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   const Toast = useToast();
   const fetchAllSessions = async () => {
   try{
     setSessionLoading(true);
-    const response = await axios.get("http://localhost:8081/api/sessions/my-sessions",{headers});
+    const response = await axios.get(`${backend_url}/api/sessions/my-sessions`,{headers});
     setSessions(response.data.data);
 
   }catch(err){
@@ -31,7 +32,7 @@ const DashBoard = () => {
 
 const onDelete = async(session_id)=>{
  try{
-    const response = await axios.delete(`http://localhost:8081/api/sessions/${session_id}`,{headers});
+    const response = await axios.delete(`${backend_url}/api/sessions/${session_id}`,{headers});
     fetchAllSessions();
     Toast({
       title: 'Session Deleted',

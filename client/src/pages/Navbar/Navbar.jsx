@@ -1,11 +1,10 @@
-import { Box, Button, Container, Flex, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 // import { authActions } from '../../store/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
-import Login from '../Auth/login'
-import SignUp from '../Auth/signUp'
+
 import { authActions } from '../../store/auth'
 import AuthModal from '../InterviewPrep/components/AuthModal'
 const Navbar = () => {
