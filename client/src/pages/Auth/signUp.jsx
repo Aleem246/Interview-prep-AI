@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {  Link as RouterLink, useNavigate } from 'react-router-dom';
 import { authActions } from '../../store/auth';
+import { AiFillEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 
 
 
@@ -129,14 +130,11 @@ export default function signUp({setActiveTab, onclose}) {
                   placeholder="Create password"
                   focusBorderColor="blue.500"
                 />
-                <InputRightElement h="full">
-                  <Button
-                    variant="ghost"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {/* {showPassword ? <ViewOffIcon /> : <ViewIcon />} */}
-                  </Button>
-                </InputRightElement>
+                <InputRightElement width="6rem">
+                    <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <AiFillEyeInvisible /> :  <AiOutlineEye/>}
+                    </Button>
+                  </InputRightElement>
               </InputGroup>
             </FormControl>
 

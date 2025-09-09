@@ -2,15 +2,17 @@ import {
   Box,   Flex,   FormControl,   FormLabel,   Input, 
   InputGroup,      Button, 
   Heading,   Text,  Stack,  useToast,
+  InputRightElement,
   
 } from '@chakra-ui/react';
-// import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+
 import { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/auth';
 import { useEffect } from 'react';
+import { AiFillEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
 const login=( {setActiveTab, onclose})=> {
   const [showPassword, setShowPassword] = useState(false);
@@ -124,15 +126,24 @@ const login=( {setActiveTab, onclose})=> {
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  focusBorderColor="blue.500"
-                  
-                />
+                <InputGroup>
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    
+                    placeholder="Enter your password"
+                    focusBorderColor="blue.500"
+                    
+                  />
+                  <InputRightElement width="6rem">
+                    <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <AiFillEyeInvisible /> :  <AiOutlineEye/>}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+
                 
               </InputGroup>
             </FormControl>
