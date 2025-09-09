@@ -2,10 +2,10 @@ import { Badge, Box, Button, Flex, Skeleton, Stack, Text, useBreakpoint, useBrea
 import axios from 'axios';
 import moment from 'moment';
 import {motion , AnimatePresence} from "framer-motion"
-import React, { useState, useEffect, use } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MdOutlinePlaylistAdd } from "react-icons/md";
 import {Link, useParams} from 'react-router-dom'
-import QuestionCard from '../../components/Cards/QuestionCArd';
+import QuestionCard from '../../components/Cards/QuestionCard';
 import Drawer from './components/Drawer';
 
 
