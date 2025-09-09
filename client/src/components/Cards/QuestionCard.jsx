@@ -84,3 +84,8 @@ const QuestionCard = ({question ,fetch, handleLearnMore , explanation, isLoading
 }
 
 export default QuestionCard
+
+
+
+
+
